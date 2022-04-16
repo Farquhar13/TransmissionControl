@@ -10,7 +10,7 @@ import csv
 # --------------------> Parameters <--------------------
 save = True # Save data to CSV
 save_data_path = "./data/"
-n_iterations = 5 # How many full simulations to run
+n_iterations = 3 # How many full simulations to run
 feature_histories = 1
 # ------------------------------------------------------------
 
@@ -42,7 +42,7 @@ currIt = 0
 while True:
   # --------------------- Create Agents ---------------------
   n_inputs = 4 * feature_histories 
-  n_actions = 2
+  n_actions = 3
   # DQN
   agents = [KerasDQN(n_inputs, n_actions,
                     hidden_layer_one_dims=128,
