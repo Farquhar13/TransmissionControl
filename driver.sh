@@ -1,9 +1,9 @@
 # Set parameters that define an experiment
 # Think of the columns of the arrays defining an experiment
 # I.e., define an experiment along the same array index
-n_agents=(10 10 10 10 10 10 10)
+n_agents=(4 4 4 4 4 4 4)
 n_actions=(2 3 4 5 6 7 8)
-threshold=(5 5 5 5 5 5 5)
+threshold=(3 3 3 3 3 3 3) 
 feature_histories=(1 1 1 1 1 1 1)
 
 # How many times to run each experiment
