@@ -13,8 +13,8 @@ feature_histories = 1
 # ------------------------------------------------------------
 
 # --------------------- Create Env ---------------------
-n_agents = 10  
-threshold = 1 
+n_agents = 10 
+threshold = 5 
 n_steps = 1e4
 transmit_and_sense = False
 """
@@ -49,7 +49,7 @@ currIt = 0
 while True:
   # --------------------- Create Agents ---------------------
   n_inputs = 4 * feature_histories 
-  n_actions = 11 
+  n_actions = 3 
   """
   # DQN
   agents = [KerasDQN(n_inputs, n_actions,
@@ -60,9 +60,9 @@ while True:
   """
   # CSMA Agents
   #agents = [CsmaAgent(wait_for_idle=True)  for _ in range(n_agents)]
-  agents = [CsmaAgent(wait_for_idle=True, back_off_strategy="fixed", p=n_actions)  for _ in range(n_agents)]
-  #agents = [CsmaAgent(wait_for_idle=False)  for _ in range(n_agents)]
-  #agents = [CsmaAgent(wait_for_idle=False, back_off_strategy="fixed", p=n_actions)  for _ in range(n_agents)]
+  #agents = [CsmaAgent(wait_for_idle=True, back_off_strategy="fixed", p=n_actions)  for _ in range(n_agents)]
+  #agents = [CsmaAgent(wait_for_idle=False)  for _ in range(n_agents)] # not used in paper
+  agents = [CsmaAgent(wait_for_idle=False, back_off_strategy="fixed", p=n_actions)  for _ in range(n_agents)]
   # ------------------------------------------------------
 
   stepIdx = 0
