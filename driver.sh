@@ -1,7 +1,7 @@
 # Set parameters that define an experiment
 # Think of the columns of the arrays defining an experiment
 # I.e., define an experiment along the same array index
-n_agents=(10 10 10 10 10 10 10 10 10 10)
+n_agents=(4)
 n_actions=(2 3 4 5 6 7 8 9 10 11)
 threshold=(2 2 2 2 2 2 2 2 2 2) 
 feature_histories=(1 1 1 1 1 1 1 1 1 1)

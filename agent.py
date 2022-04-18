@@ -13,11 +13,12 @@ feature_histories = 1
 # ------------------------------------------------------------
 
 # --------------------- Create Env ---------------------
-n_agents = 4
+n_agents = 10  
 threshold = 1 
 n_steps = 1e4
 transmit_and_sense = False
 """
+# With buffer intervals
 buffer_intervals = [1, 1]
 env = threshold_env(n_agents, threshold, n_steps, 
                     transmit_and_sense=transmit_and_sense,
@@ -48,18 +49,20 @@ currIt = 0
 while True:
   # --------------------- Create Agents ---------------------
   n_inputs = 4 * feature_histories 
-  n_actions = 5
-  # DQN
+  n_actions = 11 
   """
+  # DQN
   agents = [KerasDQN(n_inputs, n_actions,
                     hidden_layer_one_dims=128,
                     hidden_layer_two_dims=256,
                     batch_size=64,
                     epsilon_min=0.05) for _ in range(n_agents)]
-  """ 
-
+  """
   # CSMA Agents
-  agents = [CsmaAgent(wait_for_idle=True)  for _ in range(n_agents)]
+  #agents = [CsmaAgent(wait_for_idle=True)  for _ in range(n_agents)]
+  agents = [CsmaAgent(wait_for_idle=True, back_off_strategy="fixed", p=n_actions)  for _ in range(n_agents)]
+  #agents = [CsmaAgent(wait_for_idle=False)  for _ in range(n_agents)]
+  #agents = [CsmaAgent(wait_for_idle=False, back_off_strategy="fixed", p=n_actions)  for _ in range(n_agents)]
   # ------------------------------------------------------
 
   stepIdx = 0
@@ -121,6 +124,15 @@ while True:
         else:
           raise ValueError
 
+        """
+        # Idea to try for 10 agents
+        if agent_action == 0:
+          future_actions[i] = [0]
+        elif agent_action == 1:
+          future_actions[i] = [1]
+        elif agent_action == 2:
+          future_actions[i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+        """
 
         # Update actions if a new decision is made
         actions[i] = agent_action
@@ -166,6 +178,8 @@ while True:
 
         # Clear reward_over_actions
         reward_over_actions = [[] for _ in range(n_agents)]
+
+        #print("actions", actions)
 
     for i in range(n_agents):
       scores[i].append(reward[i])
