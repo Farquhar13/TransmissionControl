@@ -1,8 +1,6 @@
+from CSMA_agent import CsmaAgent
 import gym
 from custom_env import threshold_env
-#import sys
-#sys.path.insert(1, '/home/cfarquhar/rl/rl') # Relative import
-#from QNetwork_older_tf import KerasDQN
 from DQN import KerasDQN
 import numpy as np
 import csv
@@ -16,10 +14,18 @@ feature_histories = 1
 
 # --------------------- Create Env ---------------------
 n_agents = 4
-threshold = 2 
-n_steps = 1e4  
+threshold = 1 
+n_steps = 1e4
 transmit_and_sense = False
-env = threshold_env(n_agents, threshold, n_steps, transmit_and_sense=transmit_and_sense)
+"""
+buffer_intervals = [1, 1]
+env = threshold_env(n_agents, threshold, n_steps, 
+                    transmit_and_sense=transmit_and_sense,
+                    buffer_intervals=buffer_intervals)
+"""
+env = threshold_env(n_agents, threshold, n_steps, 
+                    transmit_and_sense=transmit_and_sense)
+
 # -----------------------------------------------------
 
 
@@ -42,13 +48,18 @@ currIt = 0
 while True:
   # --------------------- Create Agents ---------------------
   n_inputs = 4 * feature_histories 
-  n_actions = 3
+  n_actions = 5
   # DQN
+  """
   agents = [KerasDQN(n_inputs, n_actions,
                     hidden_layer_one_dims=128,
                     hidden_layer_two_dims=256,
                     batch_size=64,
                     epsilon_min=0.05) for _ in range(n_agents)]
+  """ 
+
+  # CSMA Agents
+  agents = [CsmaAgent(wait_for_idle=True)  for _ in range(n_agents)]
   # ------------------------------------------------------
 
   stepIdx = 0
@@ -61,7 +72,6 @@ while True:
   state = env.reset() # If I refactor state, make this work
   state = [np.zeros(n_inputs).reshape(1, -1) for _ in range(n_agents)]
   next_state = [np.zeros(n_inputs).reshape(1, -1) for _ in range(n_agents)]
-  print("starting next state", next_state)
 
   # For multi-step actions
   state_at_action = [np.zeros(n_inputs).reshape(1, -1) for _ in range(n_agents)]
@@ -72,7 +82,6 @@ while True:
   actions_to_take = [0 for _ in range(n_agents)] # do/don't transmit on this step. In {0, 1}
   
   while True:
-    #print("\nStep", stepIdx) 
     # Get Actions ------------------------------
     for i in range(n_agents):
       # if buffer is 0 don't use RL, also don't save if no RL was used
@@ -85,8 +94,6 @@ while True:
       elif action_duration[i] == 0: # make sure this can't be negative
         # Get action, save state, set future actions, and action_duration
         agent_action = agents[i].choose_action(state[i])
-        #print("agent", i, "action", agent_action)
-
         state_at_action[i] = state[i]
 
         if agent_action == 0:
@@ -99,8 +106,21 @@ while True:
           future_actions[i] = [0, 0, 1]
         elif agent_action == 4:
           future_actions[i] = [0, 0, 0, 1]
+        elif agent_action == 5:
+          future_actions[i] = [0, 0, 0, 0, 1]
+        elif agent_action == 6:
+          future_actions[i] = [0, 0, 0, 0, 0, 1]
+        elif agent_action == 7:
+          future_actions[i] = [0, 0, 0, 0, 0, 0, 1]
+        elif agent_action == 8:
+          future_actions[i] = [0, 0, 0, 0, 0, 0, 0, 1]
+        elif agent_action == 9:
+          future_actions[i] = [0, 0, 0, 0, 0, 0, 0, 0, 1]
+        elif agent_action == 10:
+          future_actions[i] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
         else:
           raise ValueError
+
 
         # Update actions if a new decision is made
         actions[i] = agent_action
@@ -113,29 +133,7 @@ while True:
 
     # Take an environment step
     new_state_info, reward, done, info = env.step(actions_to_take)
-    #print("next state before", new_state_info)
-
-    """
-    # Feature history stuff (testing)
-    for i in range(n_agents):
-      # Shift elements to the left
-      for j in range(len(next_state[i][0]) - len(new_state_info[i])):
-        next_state[i][0][j] = next_state[i][0][j + len(new_state_info[i])]
-      
-      # Add new state information to the end of the list
-      for k in range(len(new_state_info[i])):
-        next_state[i][0][-1 * len(new_state_info[i]) + k] = new_state_info[i][k]
-    """
     next_state = state_to_observations(new_state_info)
-    #print("next state after", next_state, "\n")
-    """
-    print("state", state)
-    print("actions to take", actions_to_take)
-    print("next_state", next_state)
-    print("reward", reward)
-    print("done", done)
-    print("info", info)
-    """
 
     # Decrement all action durations
     action_duration = [duration - 1 for duration in action_duration]
@@ -143,7 +141,6 @@ while True:
     # Remember reward and transitions
     for i in range(n_agents):
       agent_action = actions[i]
-      #print("action", agent_action)
 
       # Check if RL was not used
       if agent_action == -1: # RL agent not invoked. Do not save transition to memory
@@ -170,22 +167,13 @@ while True:
         # Clear reward_over_actions
         reward_over_actions = [[] for _ in range(n_agents)]
 
-
     for i in range(n_agents):
       scores[i].append(reward[i])
 
-
-    # print("reward", reward)
-    # print("acitons", actions)
-    # print("states", state)
     rewards.append(reward.copy())
     action_list.append(actions.copy())
     states.append(state)
-    
-    # print(len(rewards), reward)
-    # print(len(action_list), action_list)
-    # print(len(states), states)
-    # print()
+
     state = next_state
 
     stepIdx += 1

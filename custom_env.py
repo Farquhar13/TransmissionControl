@@ -31,6 +31,8 @@ class threshold_env(gym.Env):
         # Get reward, observation, and decrement and/or increment buffers
         obs = []
         rewards = []
+
+        
         for i in range(self.n_agents):
             did_transmit = (actions[i] == 1)
             if did_transmit:
@@ -64,7 +66,6 @@ class threshold_env(gym.Env):
             elif actions[i] == 0:
                 reward = 0 # action = 0, no transmission
             else:
-                print("Is this ever used?") # Delete this later
                 reward = 0
 
             rewards.append(reward)
@@ -86,6 +87,9 @@ class threshold_env(gym.Env):
         # Get info
         info = []
 
+        # print("step", self.current_step)
+        # print("action", actions)
+        # print("buffer", self.buffers,"\n")
 
         return obs, rewards, done, info
 

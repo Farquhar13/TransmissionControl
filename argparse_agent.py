@@ -1,8 +1,5 @@
 import gym
 from custom_env import threshold_env
-#import sys
-#sys.path.insert(1, '/home/cfarquhar/rl/rl') # Relative import
-#from QNetwork_older_tf import KerasDQN
 from DQN import KerasDQN
 import numpy as np
 import csv

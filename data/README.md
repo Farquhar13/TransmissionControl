@@ -13,4 +13,4 @@ Data:
 - run10: Same as run8, 10k steps
 - run11: 4, agents, 5 actions, history = 3, transmit_and_sense=false (testing feature histories)
 - run12: Same as runs 8 and 10, 10k steps, history=1
-
+- run13: 2 agents, 3 actions, threshold 1, history 1, transmit_and_sense=fasle, buffer_iterval = [2, 5]
