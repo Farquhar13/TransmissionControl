@@ -13,20 +13,19 @@ feature_histories = 1
 # ------------------------------------------------------------
 
 # --------------------- Create Env ---------------------
-n_agents = 10 
-threshold = 5 
+n_agents = 4 
+threshold = 1 
 n_steps = 1e4
 transmit_and_sense = False
-"""
 # With buffer intervals
-buffer_intervals = [1, 1]
+buffer_intervals = [2, 5,  8, 10] * 4
 env = threshold_env(n_agents, threshold, n_steps, 
                     transmit_and_sense=transmit_and_sense,
                     buffer_intervals=buffer_intervals)
 """
 env = threshold_env(n_agents, threshold, n_steps, 
                     transmit_and_sense=transmit_and_sense)
-
+"""
 # -----------------------------------------------------
 
 
@@ -49,9 +48,9 @@ currIt = 0
 while True:
   # --------------------- Create Agents ---------------------
   n_inputs = 4 * feature_histories 
-  n_actions = 3 
-  """
+  n_actions = 5 
   # DQN
+  """
   agents = [KerasDQN(n_inputs, n_actions,
                     hidden_layer_one_dims=128,
                     hidden_layer_two_dims=256,

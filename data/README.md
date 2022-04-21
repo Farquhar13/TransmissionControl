@@ -13,4 +13,18 @@ Data:
 - run10: Same as run8, 10k steps
 - run11: 4, agents, 5 actions, history = 3, transmit_and_sense=false (testing feature histories)
 - run12: Same as runs 8 and 10, 10k steps, history=1
-- run13: 2 agents, 3 actions, threshold 1, history 1, transmit_and_sense=fasle, buffer_iterval = [2, 5]
+- run13: 2 agents, 3 actions, threshold 1, history 1, transmit_and_sense=fasle, buffer_iterval = [2, 5] (bugged)
+- run14: 4 agents, 5 actions, threshold 1, buffer_interval = [3, 3, 3, 3]
+- run15: 4 agents, 5 actions, threshold 1, buffer_interval = 10 for all
+- run16: 4 agents, 5 actions, threshold 1, buffer_interval = 10 for all, 5-peristent benchmark, 2k steps
+- run17: 4 agents, 5 actions, threshold 1, buffer 10 for all, 3 runs
+- run18: 4 agents, 5 actions, threshold 1, buffer_interval = 10 for all, 5-peristent benchmark, 10k steps
+- run19: 4 agents, 5 actions, threshold 1, buffer 5 for all, 3 runs
+- run20: 4 agents, 5 actions, threshold 1, buffer 8 for all, 3 runs
+- run21: 4 agents, 5 actions, threshold 1, buffer 8 for all, 3 runs, 5-peristent benchmark
+- run22: 4 agents, 5 actions, threshold 1, buffer rates [2, 5, 8, 10] for all, 3 runs
+- run23: 4 agents, 5 actions, threshold 1, buffer rates [2, 5, 8, 10] for all, 3 runs, 5-peristent benchmark
+
+
+
+
